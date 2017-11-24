@@ -3,16 +3,15 @@ import "./App.css";
 
 const NUM_BOXES = 32;
 
-const Box = props => {
-  const Box = ({color}) => {
-    const style = {
-      width: '180px',
-      height: '180px',
-      display: 'inline-block',
-      backgroundColor: color
-    }
-    return <div style={style} />;
+const Box = ({ color }) => {
+  const style = {
+    width: "180px",
+    height: "180px",
+    display: "inline-block",
+    backgroundColor: color
   };
+  return <div style={style} />;
+};
 
 class App extends Component {
   constructor(props) {
@@ -21,14 +20,23 @@ class App extends Component {
       .fill()
       .map(this.getRandomColor, this);
     this.state = { boxes };
+
+    setInterval(() => {
+      const boxes = this.state.boxes.slice();
+      const randIndex = Math.floor(Math.random() * boxes.length);
+      boxes[randIndex] = this.getRandomColor();
+      this.setState({ boxes });
+    }, 300);
   }
 
   getRandomColor() {
     let colorIndex = Math.floor(Math.random() * this.props.allColors.length);
     return this.props.allColors[colorIndex];
   }
+
   render() {
-    return <div className="App">Render boxes here</div>;
+    const boxes = this.state.boxes.map((color, index) => <Box key={index} color={color} />);
+    return <div className="App">{boxes}</div>;
   }
 }
 
